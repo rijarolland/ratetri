@@ -1,0 +1,9 @@
+app_front_home:
+    path: /
+    controller: App\Controller\FrontController::home
+    methods: ['GET']
+
+app_front_search:
+    path: /search
+    controller: App\Controller\FrontController::search
+    methods: ['POST']

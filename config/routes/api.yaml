@@ -1,0 +1,4 @@
+app_api_search:
+    path: /search
+    controller: App\Controller\RateTriController::search
+    methods: ['POST']

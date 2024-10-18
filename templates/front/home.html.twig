@@ -1,0 +1,137 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Meilleur taux{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container p-4">
+
+        <h1 class="text-center">Meilleur taux</h1>
+
+        <form name="ratetriForm" id="ratetriForm" action="{{ path('app_api_search') }}" method="post" novalidate="novalidate">
+
+            <div class="card mt-5">
+                <div class="card-body p-5">
+                    <div class="row">
+
+                        <div class="col-6 mb-4">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Montant du prêt
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="amount" name="amount">
+                                    <option value="50000" selected>50000</option>
+                                    <option value="100000">100000</option>
+                                    <option value="200000">200000</option>
+                                    <option value="500000">500000</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-4">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Durée du prêt en années
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" id="delay" name="delay">
+                                    <option value="15" selected>15 ans</option>
+                                    <option value="20">20 ans</option>
+                                    <option value="25">25 ans</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-4">
+                            <div class="form-group">
+                                <label class="form-label" for="name">
+                                    Nom
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" name="name" id="name" type="text" value="" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-4">
+                            <div class="form-group">
+                                <label class="form-label" for="email">
+                                    Email
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" name="email" id="email" type="text" value="" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="col-6 mb-4">
+                            <div class="form-group">
+                                <label class="form-label" for="phone">
+                                    Téléphone
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control" name="phone" id="phone" type="text" value="" autocomplete="off" />
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-4 mb-4 text-end">
+                            <button type="submit" class="btn btn-primary">Trouver le meilleur taux</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <div id="results"></div>
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script>
+
+        $(document).ready(function() {
+
+            $('#ratetriForm').on('submit', function (e) {
+
+                e.preventDefault();
+
+                // Form data
+                formData = new FormData();
+                formData.append("amount", $("#amount").val());
+                formData.append("delay", $("#delay").val());
+                formData.append("name", $("#name").val());
+                formData.append("email", $("#email").val());
+                formData.append("phone", $("#phone").val());
+
+                $.ajax({
+                    url: "{{ path('app_api_search') }}", 
+                    type: "POST",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(resp) {
+
+                        response = $.parseJSON(resp);
+                        
+                        $("#results").html(response);
+
+                    }
+                });
+
+            });
+    
+        });
+
+    </script>
+
+{% endblock %}
